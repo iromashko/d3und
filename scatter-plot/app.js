@@ -42,7 +42,7 @@ async function draw() {
   const yScale = d3
     .scaleLinear()
     .domain(d3.extent(dataset, yAccessor))
-    .rangeRound([0, dimensions.ctrHeight])
+    .rangeRound([dimensions.ctrHeight, 0])
     .nice()
     .clamp(true);
 
@@ -53,9 +53,16 @@ async function draw() {
     .attr('cx', (d) => xScale(xAccessor(d)))
     .attr('cy', (d) => yScale(yAccessor(d)))
     .attr('r', 5)
-    .attr('fill', 'red');
+    .attr('fill', 'red')
+    .attr('data-temp', yAccessor);
 
-  const xAxis = d3.axisBottom(xScale);
+  const xAxis = d3
+    .axisBottom(xScale)
+    .ticks(5)
+    .tickFormat((d) => d * 100 + '%');
+
+  //tickValues([0.3,0.7,0.9])
+  
   const yAxis = d3.axisLeft(yScale);
 
   const yAxisGroup = ctr.append('g').call(yAxis).classed('axis', true);
@@ -67,7 +74,7 @@ async function draw() {
     .attr('fill', 'black')
     .html('Temperature &deg; F')
     .style('transform', 'rotate(270deg')
-    .style('text-anchor', 'middle')
+    .style('text-anchor', 'middle');
 
   const xAxisGroup = ctr
     .append('g')
