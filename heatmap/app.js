@@ -29,11 +29,19 @@ async function draw(el, scale) {
       .scaleQuantize()
       .domain(d3.extent(dataset))
       .range(['white', 'pink', 'red']);
+
+    console.log(`Quantize: ${colorScale.thresholds()}`);
   } else if (scale === 'quantile') {
     colorScale = d3
       .scaleQuantile()
       .domain(dataset)
       .range(['white', 'pink', 'red']);
+    console.log(`Quantile: ${colorScale.quantiles()}`);
+  } else if (scale === 'threshold') {
+    colorScale = d3
+      .scaleThreshold(dataset)
+      .domain([45200, 135600])
+      .range(d3.schemeReds[3]);
   }
 
   svg
@@ -53,3 +61,4 @@ async function draw(el, scale) {
 draw('#heatmap1', 'linear');
 draw('#heatmap2', 'quantize');
 draw('#heatmap3', 'quantile');
+draw('#heatmap4', 'threshold');
